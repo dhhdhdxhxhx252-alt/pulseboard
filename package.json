@@ -1,0 +1,29 @@
+{
+  "name": "pulseboard",
+  "version": "1.0.0",
+  "description": "Zero-dependency uptime monitor that publishes a static status page and SVG badges to GitHub Pages.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "pulseboard": "src/main.js"
+  },
+  "scripts": {
+    "test": "node --test",
+    "check": "node src/main.js"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "uptime-monitor",
+    "status-page",
+    "github-pages",
+    "healthcheck",
+    "svg-badge"
+  ]
+}

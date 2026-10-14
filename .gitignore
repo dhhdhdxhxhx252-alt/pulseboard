@@ -1,0 +1,6 @@
+node_modules/
+npm-debug.log*
+*.tgz
+site/
+pulseboard.config.local.json
+.DS_Store

@@ -1,0 +1,50 @@
+name: Pages status
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: status-page
+  cancel-in-progress: false
+
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Probe targets and render the site
+        run: node src/main.js --config pulseboard.config.json --out site --state state.json
+
+      - name: Publish to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Deploy Pages
+        uses: actions/deploy-pages@v4
+
+      - name: Commit history back to the repo
+        run: |
+          if git diff --quiet -- state.json; then
+            echo "history unchanged"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41858750+github-actions[bot]@users.noreply.github.com"
+          git add state.json
+          git commit -m "status: history update [skip ci]"
+          git push origin HEAD:${{ github.ref_name }}
